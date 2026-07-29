@@ -1,0 +1,175 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Ian Lucas. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+"Games"
+{
+    "csgo"
+    {
+        "Offsets"
+        {
+            "GiveNamedItem"
+            {
+                "linux"     "459"
+                "windows"   "458"
+            }
+            "GetItemInLoadout"
+            {
+                "linux"     "9"
+                "windows"   "8"
+            }
+            "GetItemDefinitionByName"
+            {
+                "linux"     "41"
+                "windows"   "42"
+            }
+            "SendInventoryUpdateEvent"
+            {
+                "linux"     "17"
+                "windows"   "16"
+            }
+            "ItemDefinitionIndex"
+            {
+                "linux"     "8"
+                "windows"   "8"
+            }
+            "ItemDefinitionLoadoutSlot"
+            {
+                "linux"     "616"
+                "windows"   "616"
+            }
+            "ItemDefinitionPlayerModel"
+            {
+                "linux"     "148"
+                "windows"   "148"
+            }
+            "ItemDefinitionVoicePrefix"
+            {
+                "linux"     "672"
+                "windows"   "672"
+            }
+            "PlayerVoicePrefix"
+            {
+                "linux"     "15120"
+                "windows"   "15100"
+            }
+            "PlayerInventoryOffsetInBuyCommand"
+            {
+                "linux"     "90"
+                "windows"   "57"
+            }
+            "GetItemSchemaReturnAdjustment"
+            {
+                "linux"     "0"
+                "windows"   "4"
+            }
+            "GameClientUserId"
+            {
+                "linux"     "120"
+                "windows"   "120"
+            }
+        }
+
+        "Addresses"
+        {
+            "CGameClient::ActivatePlayer"
+            {
+                "signature" "CGameClient::ActivatePlayer"
+            }
+            "HandleCommand_Buy_Internal"
+            {
+                "signature" "HandleCommand_Buy_Internal"
+            }
+            "CCSPlayerInventory::GetItemInLoadout"
+            {
+                "signature" "CCSPlayerInventory::GetItemInLoadout"
+            }
+        }
+
+        "Signatures"
+        {
+            "CGameClient::ActivatePlayer"
+            {
+                "library"   "engine"
+                "linux"     "\x2A\x2A\x2A\x2A\x2A\x2A\x83\xEC\x28\x8B\x5D\x08\x53\xE8\x2A\x2A\x2A\x2A\xC7\x04\x24\x2A\x2A\x2A\x2A\xE8\x2A\x2A\x2A\x2A\x83\xC4\x10\x80\x3D\x2A\x2A\x2A\x2A\x00\x0F\x84"
+                "windows"   "\x55\x8B\xEC\x51\x53\x8B\x1D\x2A\x2A\x2A\x2A\x57\x68"
+            }
+            "CCSPlayer::GiveDefaultWearables"
+            {
+                "library"   "server"
+                "linux"     "\x55\x89\xE5\x57\x56\x53\x83\xEC\x58\x8B\x75\x08\x56\xE8\x2A\x2A\x2A\x2A\x83\xC4\x10\x83\xF8\x03\x74\x1E\x83\xEC\x0C\x56\xE8\x2A\x2A\x2A\x2A\x83\xC4\x10\x83\xF8\x02"
+                "windows"   "\x55\x8B\xEC\x83\xEC\x08\x53\x8B\xD9\x56\x57\x89\x5D\xF8\x8B\x83\x14\x03"
+            }
+            "CCSPlayer::EquipWearableItemInLoadoutSlot"
+            {
+                "library"   "server"
+                "linux"     "\x55\x89\xE5\x57\x56\x53\x83\xEC\x18\x8B\x75\x08\x8B\x7D\x0C\x56\xE8\x2A\x2A\x2A\x2A\x83\xC4\x0C\x57\x50\x8D\x86\x2A\x2A\x2A\x2A\x50\xE8\x2A\x2A\x2A\x2A\x83\xC4\x10\x85\xC0\x74\x08\x80\x78\x7C\x00"
+                "windows"   "\x55\x8B\xEC\x51\x53\x56\x8B\x75\x08\x57\x8B\xF9\x8B\x87\x48\x31\x00"
+            }
+            "CCSPlayerInventory::GetItemInLoadout"
+            {
+                "library"   "server"
+                "linux"     "\x55\x89\xE5\x57\x56\x53\x83\xEC\x1C\x8B\x7D\x10\x8B\x75\x0C\x83\xFF\x38\x0F\x87\x2A\x2A\x2A\x2A\x83\xFE\x03\x0F\x87\x2A\x2A\x2A\x2A\x8B\x4D\x08\x6B\xC6\x39\x8D\x44\x07\x14"
+                "windows"   "\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x8B\x75\x0C\x8B\xD9\x57"
+            }
+            "CEconItemSchema::GetItemDefinitionByIndex"
+            {
+                "library"   "server"
+                "linux"     "\x55\x89\xE5\x57\x56\x53\x83\xEC\x10\x8B\x45\x10\x8B\x7D\x08\x8B\x5D\x0C\x89\x45\xE4\x8B\x87\xE0\x00\x00\x00\x85\xC0\x0F\x84\x2A\x2A\x2A\x2A\x89\xD8\x8B\xB7\xB8\x00\x00\x00"
+                "windows"   "\x55\x8B\xEC\x8B\x45\x08\x56\x57\x8B\xF9\x89\x45\x08\x8D\x45\x08\x50\x8D\x8F\xAC\x00\x00\x00\xE8\x2A\x2A\x2A\x2A\x85\xC0\x78\x22\x3B\x87\xE4\x00\x00\x00\x7D\x1A\x8D\x0C\x40\x8B\x87\xD0\x00\x00\x00\x83\x7C\x88\x08\xFF\x7C\x0A\x8B\x44\x88\x04\x5F\x5E\x5D\xC2\x08\x00\x80"
+            }
+            "CUtlString::Set"
+            {
+                "library"   "server"
+                "linux"     "\x55\x31\xC0\x89\xE5\x53\x83\xEC\x04\x8B\x5D\x0C"
+                "windows"   "\x55\x8B\xEC\x56\x8B\x75\x08\x57\x8B\xF9\x85\xF6\x74\x20\x8B\xD6"
+            }
+            "GetItemSchema"
+            {
+                "library"   "server"
+                "linux"     "\x55\x89\xE5\x83\xEC\x08\xE8\x2A\x2A\x2A\x2A\xC9\x83\xC0\x04\xC3"
+                "windows"   "\xA1\x2A\x2A\x2A\x2A\x85\xC0\x75\x53\xA1"
+            }
+            "HandleCommand_Buy_Internal"
+            {
+                "library"   "server"
+                "linux"     "\x2A\x2A\x2A\x2A\x2A\x2A\x83\xEC\x54\x8B\x5D\x2A\x6A\x01\x8B\x7D\x2A\x8B"
+                "windows"   "\x55\x8B\xEC\x83\xEC\x24\x53\x56\x57\x6A\x01\x8B\xF9"
+            }
+            "CEconItemView::CEconItemView"
+            {
+                "library"   "server"
+                "linux"     "\x55\x31\xD2\x89\xE5\x8B\x45\x08\xC7\x00\x2A\x2A\x2A\x2A\xC7\x40\x08\x00\x00\x00\x00"
+                "windows"   "\x55\x8B\xEC\x83\xE4\xF8\x51\x53\x56\x57\x8B\xF9\x8D\x5F\x70"
+            }
+            "CEconItemView::~CEconItemView"
+            {
+                "library"   "server"
+                "linux"     "\x55\x89\xE5\x57\x56\x53\x83\xEC\x28\x8B\x75\x08\xC7\x06\x2A\x2A\x2A\x2A\x56\xE8\x2A\x2A\x2A\x2A"
+                "windows"   "\x56\x8B\xF1\x57\x8D\x8E\x80\x00\x00\x00"
+            }
+            "CEconItemView::Init"
+            {
+                "library"   "server"
+                "linux"     "\x55\x89\xE5\x57\x56\x53\x83\xEC\x1C\x8B\x5D\x08\x8B\x75\x0C\x8B\x7D\x14\xC7\x83\x90\x00\x00\x00\x00\x00\x00\x00"
+                "windows"   "\x55\x8B\xEC\x83\xE4\xF8\x83\xEC\x0C\x53\x56\x8B\xF1\x57\xC7\x86\x90"
+            }
+            "CEconItemSchema::GetAttributeDefinitionByName"
+            {
+                "library"   "server"
+                "windows"   "\x55\x8B\xEC\x53\x56\x57\x8B\xF9\x8B\x0D\x2A\x2A\x2A\x2A\x8B\x99\x0C\x10"
+            }
+            "CUtlVector<CEconItemAttribute>::InsertBefore"
+            {
+                "library"   "server"
+                "windows"   "\x55\x8B\xEC\x56\x8B\xF1\x57\x8B\x4E\x0C\x8B\x56\x04\x8D\x41\x01\x3B\xC2\x7E\x0B\x2B\xCA\x41\x51\x8B\xCE\xE8\x2A\x2A\x2A\x2A\xFF\x46\x0C\x8B\x56\x0C\x8B\x7D\x08\x2B\xD7\x8B\x0E\x4A\x89\x4E\x10\x85\xD2\x7E\x1A\x8D\x04\x7F\x8D\x0C\xC1\x8D\x04\x52\xC1\xE0\x03\x50\x51\x8D\x41\x18\x50\xE8\x2A\x2A\x2A\x2A\x83\xC4\x0C\x8B\x06\x8D\x0C\x7F\x8D\x04\xC8\x85\xC0\x74\x29\x8B\x55\x0C\xC7\x00\x2A\x2A\x2A\x2A\x66\x8B\x4A\x04\x66\x89\x48\x04"
+            }
+            "CAttributeList::SetOrAddAttributeValueByName"
+            {
+                "library"   "server"
+                "linux"     "\x55\x89\xE5\x57\x56\x53\x83\xEC\x3C\x8B\x7D\x08\xE8\x2A\x2A\x2A\x2A\x83\xEC\x08\xFF\x75\x0C\x50\xE8\x2A\x2A\x2A\x2A"
+            }
+        }
+    }
+}

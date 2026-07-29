@@ -1,0 +1,47 @@
+invsim_url "https://inventory.cstrike.app"
+    API URL for the Inventory Simulator service.
+
+invsim_apikey ""
+    API key for the Inventory Simulator service.
+
+invsim_file "inventories.json"
+    Inventory data file to load when the plugin starts.
+
+invsim_ws_enabled 0
+    Allow players to refresh their inventory using the !ws command.
+
+invsim_ws_immediately 0
+    Apply skin changes immediately without requiring a respawn.
+
+invsim_ws_cooldown 30
+    Cooldown duration in seconds between inventory refreshes per player.
+
+invsim_chat_prefix ""
+    Prefix displayed before chat messages.
+
+invsim_ws_url_print_format "{Host}"
+    URL format string displayed when using the !ws command.
+
+invsim_wslogin 0
+    Allow players to authenticate with Inventory Simulator and display their login URL (not recommended).
+
+invsim_persist_inventory 0
+    Keep a player's cached inventory after they disconnect.
+
+invsim_require_inventory 0
+    Require the player's inventory to be fetched before allowing them to join the game.
+
+invsim_stattrak_ignore_bots 1
+    Ignore StatTrak kill count increments for bot kills.
+
+invsim_fallback_team 0
+    Allow using skins from any team (prioritizes current team first).
+
+invsim_minmodels 0
+    Enable player agents (0 = enabled, 1 = use map models per team, 2 = SAS & Phoenix).
+
+sm_ws
+    Refreshes player inventory from the Inventory Simulator service and displays the configured URL.
+
+sm_wslogin
+    Authenticates the player with Inventory Simulator and displays their login URL.

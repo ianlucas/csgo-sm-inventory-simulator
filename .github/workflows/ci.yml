@@ -1,0 +1,163 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to release"
+        required: false
+        type: string
+      draft:
+        description: "Create as draft release"
+        required: false
+        type: boolean
+        default: false
+      prerelease:
+        description: "Create as pre-release"
+        required: false
+        type: boolean
+        default: false
+
+env:
+  PROJECT_NAME: InventorySimulator
+  SOURCEMOD_REF: 1.12.0.7246
+  SOURCEMOD_BRANCH: "1.12"
+  SOURCEMOD_PACKAGE: sourcemod-1.12.0-git7246
+  VERSION: ${{ inputs.version || '0.0.0' }}
+
+jobs:
+  build:
+    name: Build for ${{ matrix.platform }}
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux
+            runs-on: ubuntu-latest
+          - platform: windows
+            runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Checkout SourceMod SDK
+        uses: actions/checkout@v7
+        with:
+          repository: alliedmodders/sourcemod
+          ref: ${{ env.SOURCEMOD_REF }}
+          path: .deps/sourcemod
+          submodules: recursive
+
+      - name: Update plugin version
+        if: inputs.version != ''
+        shell: bash
+        run: |
+          if [[ ! "$VERSION" =~ ^[0-9A-Za-z]+([._+-][0-9A-Za-z]+)*$ ]]; then
+            echo "Invalid version: $VERSION" >&2
+            exit 1
+          fi
+          sed -i \
+            "s/#define INVSIM_VERSION \"1.0.0\"/#define INVSIM_VERSION \"$VERSION\"/" \
+            scripting/inventorysimulator/constants.sp
+          sed -i \
+            "s/#define SMEXT_CONF_VERSION       \"1.0.0\"/#define SMEXT_CONF_VERSION       \"$VERSION\"/" \
+            extensions/inventorysimulator/sdk/smsdk_config.h
+
+      - name: Install Linux compiler
+        if: matrix.platform == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y g++-multilib
+
+      - name: Set up Windows compiler
+        if: matrix.platform == 'windows'
+        uses: TheMrMilchmann/setup-msvc-dev@v4
+        with:
+          arch: x86
+
+      - name: Download SourceMod compiler for Linux
+        if: matrix.platform == 'linux'
+        run: |
+          mkdir -p .deps/sourcemod-package
+          curl -fsSL \
+            "https://sm.alliedmods.net/smdrop/$SOURCEMOD_BRANCH/$SOURCEMOD_PACKAGE-linux.tar.gz" \
+            | tar -xz -C .deps/sourcemod-package
+
+      - name: Build Linux native bridge
+        if: matrix.platform == 'linux'
+        run: |
+          make -C extensions/inventorysimulator clean \
+            SOURCEMOD="$GITHUB_WORKSPACE/.deps/sourcemod"
+          make extension \
+            SOURCEMOD="$GITHUB_WORKSPACE/.deps/sourcemod"
+          test -f extensions/inventorysimulator/build/inventorysimulator.ext.2.csgo.so
+
+      - name: Build Linux release archive
+        if: matrix.platform == 'linux'
+        run: |
+          make archive \
+            VERSION="$VERSION" \
+            SPCOMP="$GITHUB_WORKSPACE/.deps/sourcemod-package/addons/sourcemod/scripting/spcomp64" \
+            SM_INCLUDE="$GITHUB_WORKSPACE/.deps/sourcemod-package/addons/sourcemod/scripting/include"
+
+      - name: Build Windows release archive
+        if: matrix.platform == 'windows'
+        shell: pwsh
+        run: ./build.ps1
+
+      - name: Upload install package
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.PROJECT_NAME }}${{ inputs.version != '' && format('-v{0}', inputs.version) || '' }}-${{ matrix.platform }}
+          path: build/package/
+          if-no-files-found: error
+
+  release:
+    name: Create release
+    if: github.event_name == 'workflow_dispatch' && inputs.version != ''
+    needs: build
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Download release packages
+        uses: actions/download-artifact@v7
+        with:
+          pattern: ${{ env.PROJECT_NAME }}-v*
+          path: release
+
+      - name: Build release archives
+        run: |
+          for package in release/${PROJECT_NAME}-v*; do
+            (cd "$package" && zip -q -r "../$(basename "$package").zip" .)
+          done
+
+      - name: Generate changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$PREV_TAG" ]; then
+            git log --pretty=format:"* %s (%h)" --reverse > changelog.txt
+          else
+            git log "${PREV_TAG}..HEAD" --pretty=format:"* %s (%h)" --reverse > changelog.txt
+          fi
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$VERSION" \
+            --title "v$VERSION" \
+            --notes-file changelog.txt \
+            ${{ inputs.draft && '--draft' || '' }} \
+            ${{ inputs.prerelease && '--prerelease' || '' }} \
+            release/*.zip

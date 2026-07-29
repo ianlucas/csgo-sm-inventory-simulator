@@ -1,0 +1,68 @@
+"Phrases"
+{
+    "Announce"
+    {
+        "#format"       "{1:s}"
+        "en"            "Access your inventory at {1}."
+        "pt"            "Acesse seu inventário em {1}."
+        "chi"           "请访问 {1} 查看您的库存。"
+    }
+
+    "RefreshStarted"
+    {
+        "en"            "Your inventory will be refreshed shortly."
+        "pt"            "Seu inventário será atualizado em instantes."
+        "chi"           "您的库存即将刷新。"
+    }
+
+    "RefreshInProgress"
+    {
+        "en"            "Your inventory is being refreshed."
+        "pt"            "Seu inventário está sendo atualizado."
+        "chi"           "您的库存正在刷新中。"
+    }
+
+    "RefreshCooldown"
+    {
+        "#format"       "{1:d}"
+        "en"            "You cannot refresh your inventory right now. Please wait {1} seconds."
+        "pt"            "Você não pode atualizar seu inventário agora. Aguarde {1} segundos."
+        "chi"           "您现在无法刷新库存。请等待 {1} 秒后重试。"
+    }
+
+    "RefreshCompleted"
+    {
+        "en"            "Your inventory has been refreshed."
+        "pt"            "Seu inventário foi atualizado."
+        "chi"           "您的库存已刷新。"
+    }
+
+    "RefreshFailed"
+    {
+        "en"            "Unable to refresh your inventory. Please try again later."
+        "pt"            "Não foi possível atualizar seu inventário. Tente novamente mais tarde."
+        "chi"           "无法刷新您的库存，请稍后再试。"
+    }
+
+    "LoginInProgress"
+    {
+        "en"            "Trying to authenticate to your inventory..."
+        "pt"            "Tentando autenticar ao seu inventário..."
+        "chi"           "正在尝试登录您的库存..."
+    }
+
+    "Login"
+    {
+        "#format"       "{1:s}"
+        "en"            "Access {1} to view your inventory."
+        "pt"            "Acesse {1} para ver seu inventário."
+        "chi"           "访问 {1} 以查看您的库存。"
+    }
+
+    "LoginFailed"
+    {
+        "en"            "Unable to authenticate to your inventory. Please try again later."
+        "pt"            "Não foi possível autenticar ao seu inventário. Tente novamente mais tarde."
+        "chi"           "无法登录您的库存，请稍后再试。"
+    }
+}

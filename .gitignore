@@ -1,0 +1,8 @@
+/.deps/
+/build/
+/extensions/inventorysimulator/build/
+*.i64
+*.idb
+*.nam
+*.til
+__pycache__/
