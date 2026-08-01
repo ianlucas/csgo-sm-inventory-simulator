@@ -14,6 +14,7 @@ ConVar g_CvarWsUrlPrintFormat;
 ConVar g_CvarWsLogin;
 ConVar g_CvarPersistInventory;
 ConVar g_CvarRequireInventory;
+ConVar g_CvarPublicApiStatTrak;
 ConVar g_CvarStatTrakIgnoreBots;
 ConVar g_CvarFallbackTeam;
 ConVar g_CvarMinModels;
@@ -105,6 +106,16 @@ void ConVars_Initialize()
         true,
         1.0
     );
+    g_CvarPublicApiStatTrak = CreateConVar(
+        "invsim_public_api_stattrak_increment",
+        "1",
+        "Send keyless StatTrak increment requests to the public API when invsim_apikey is not set.",
+        FCVAR_NONE,
+        true,
+        0.0,
+        true,
+        1.0
+    );
     g_CvarStatTrakIgnoreBots = CreateConVar(
         "invsim_stattrak_ignore_bots",
         "1",
@@ -152,6 +163,61 @@ void ConVars_Initialize()
         g_CvarRequireInventory,
         ConVars_OnRequireInventoryChanged
     );
+    HookConVarChange(g_CvarUrl, ConVars_OnUrlChanged);
+    HookConVarChange(g_CvarApiKey, ConVars_OnApiSuspensionConVarChanged);
+    HookConVarChange(
+        g_CvarPublicApiStatTrak,
+        ConVars_OnApiSuspensionConVarChanged
+    );
+}
+
+public void ConVars_OnUrlChanged(
+    ConVar convar,
+    const char[] oldValue,
+    const char[] newValue
+)
+{
+    Api_ResetSuspension();
+    if (StrEqual(oldValue, newValue))
+    {
+        return;
+    }
+    if (!ConVars_IsOfficialHost(newValue))
+    {
+        g_CvarPublicApiStatTrak.SetInt(0);
+    }
+}
+
+public void ConVars_OnApiSuspensionConVarChanged(
+    ConVar convar,
+    const char[] oldValue,
+    const char[] newValue
+)
+{
+    Api_ResetSuspension();
+}
+
+static bool ConVars_IsOfficialHost(const char[] url)
+{
+    char host[128];
+    int start = StrContains(url, "://");
+    start = start == -1 ? 0 : start + 3;
+    int written = 0;
+    for (int index = start;
+        url[index] != '\0' && written < sizeof(host) - 1;
+        index++)
+    {
+        if (url[index] == '/'
+            || url[index] == ':'
+            || url[index] == '?'
+            || url[index] == '#')
+        {
+            break;
+        }
+        host[written++] = url[index];
+    }
+    host[written] = '\0';
+    return StrEqual(host, "inventory.cstrike.app", false);
 }
 
 public void ConVars_OnFileChanged(
