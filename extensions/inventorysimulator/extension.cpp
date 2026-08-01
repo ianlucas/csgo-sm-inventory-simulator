@@ -101,7 +101,12 @@ using GetAPICallResultFn = bool (*)(
     bool *
 );
 
+#if defined(_WIN32)
+#pragma pack(push, 8)
+#else
 #pragma pack(push, 4)
+#endif
+
 struct HTTPRequestCompleted
 {
     HTTPRequestHandle request;
@@ -110,12 +115,20 @@ struct HTTPRequestCompleted
     int statusCode;
     uint32_t bodySize;
 };
+
 #pragma pack(pop)
 
+#if defined(_WIN32)
+static_assert(
+    sizeof(HTTPRequestCompleted) == 32,
+    "Unexpected Windows Steam HTTP callback layout"
+);
+#else
 static_assert(
     sizeof(HTTPRequestCompleted) == 24,
-    "Unexpected Steam HTTP callback layout"
+    "Unexpected Linux Steam HTTP callback layout"
 );
+#endif
 
 struct PendingRequest
 {
