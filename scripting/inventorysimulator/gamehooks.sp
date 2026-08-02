@@ -245,10 +245,6 @@ public MRESReturn GameHooks_OnGiveNamedItemPre(
 
     char classname[64];
     parameters.GetString(1, classname, sizeof(classname));
-    if (parameters.Get(3) != 0)
-    {
-        return MRES_Ignored;
-    }
 
     Address definition = NativeItems_GetDefinitionByName(classname);
     if (definition == Address_Null)
