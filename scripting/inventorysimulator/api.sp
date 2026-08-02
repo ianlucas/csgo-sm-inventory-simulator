@@ -10,6 +10,49 @@ enum ApiRequestKind
     ApiRequest_StatTrak
 };
 
+static bool g_ApiSuspended;
+static StringMap g_StatTrakBuckets;
+
+void Api_ResetSuspension()
+{
+    g_ApiSuspended = false;
+}
+
+static bool Api_ConsumeStatTrakToken(const char[] steamId, int uid)
+{
+    if (g_StatTrakBuckets == null)
+    {
+        g_StatTrakBuckets = new StringMap();
+    }
+
+    char key[80];
+    Format(key, sizeof(key), "%s:%d", steamId, uid);
+
+    float now = GetEngineTime();
+    float bucket[2]; // tokens, updatedAt
+    if (!g_StatTrakBuckets.GetArray(key, bucket, sizeof(bucket)))
+    {
+        bucket[0] = INVSIM_STATTRAK_RATE_LIMIT_CAPACITY;
+        bucket[1] = now;
+    }
+
+    float elapsed = now - bucket[1];
+    bucket[0] += elapsed / INVSIM_STATTRAK_RATE_LIMIT_REFILL_INTERVAL;
+    if (bucket[0] > INVSIM_STATTRAK_RATE_LIMIT_CAPACITY)
+    {
+        bucket[0] = INVSIM_STATTRAK_RATE_LIMIT_CAPACITY;
+    }
+    bucket[1] = now;
+
+    bool consumed = bucket[0] >= 1.0;
+    if (consumed)
+    {
+        bucket[0] -= 1.0;
+    }
+    g_StatTrakBuckets.SetArray(key, bucket, sizeof(bucket));
+    return consumed;
+}
+
 void Api_FetchInventory(int client, bool force, int attempt = 1)
 {
     if (!IsClientConnected(client) || IsFakeClient(client))
@@ -126,29 +169,55 @@ void Api_SignIn(int client)
 
 void Api_SendStatTrak(const char[] steamId, int uid)
 {
-    char apiKey[256];
-    g_CvarApiKey.GetString(apiKey, sizeof(apiKey));
-    if (apiKey[0] == '\0')
+    if (g_ApiSuspended)
     {
         return;
     }
 
-    char escapedKey[512];
-    Json_Escape(apiKey, escapedKey, sizeof(escapedKey));
+    char apiKey[256];
+    g_CvarApiKey.GetString(apiKey, sizeof(apiKey));
+    bool hasApiKey = apiKey[0] != '\0';
+    if (!hasApiKey)
+    {
+        if (!g_CvarPublicApiStatTrak.BoolValue)
+        {
+            return;
+        }
+        if (!Api_ConsumeStatTrakToken(steamId, uid))
+        {
+            return;
+        }
+    }
+
     char baseUrl[INVSIM_MAX_URL];
     char url[INVSIM_MAX_URL];
     ConVars_GetApiUrl(baseUrl, sizeof(baseUrl));
     Format(url, sizeof(url), "%s/api/increment-item-stattrak", baseUrl);
 
     char body[896];
-    Format(
-        body,
-        sizeof(body),
-        "{\"apiKey\":\"%s\",\"targetUid\":%d,\"userId\":\"%s\"}",
-        escapedKey,
-        uid,
-        steamId
-    );
+    if (hasApiKey)
+    {
+        char escapedKey[512];
+        Json_Escape(apiKey, escapedKey, sizeof(escapedKey));
+        Format(
+            body,
+            sizeof(body),
+            "{\"apiKey\":\"%s\",\"targetUid\":%d,\"userId\":\"%s\"}",
+            escapedKey,
+            uid,
+            steamId
+        );
+    }
+    else
+    {
+        Format(
+            body,
+            sizeof(body),
+            "{\"targetUid\":%d,\"userId\":\"%s\"}",
+            uid,
+            steamId
+        );
+    }
 
     DataPack context = new DataPack();
     context.WriteCell(ApiRequest_StatTrak);
@@ -294,6 +363,10 @@ public void Api_OnResponse(
     delete context;
     if (!transportSuccess || statusCode < 200 || statusCode >= 300)
     {
+        if (statusCode == 401)
+        {
+            g_ApiSuspended = true;
+        }
         LogError(
             "StatTrak update failed (HTTP %d): %s",
             statusCode,
