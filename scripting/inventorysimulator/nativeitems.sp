@@ -1119,7 +1119,7 @@ Handle NativeItems_CreateRawVoidSignatureCall(const char[] signature)
 
 Handle NativeItems_CreateDefinitionByIndexCall()
 {
-    StartPrepSDKCall(SDKCall_Static);
+    StartPrepSDKCall(SDKCall_Raw);
     if (!PrepSDKCall_SetFromConf(
         g_InventoryGameData,
         SDKConf_Signature,
@@ -1130,7 +1130,6 @@ Handle NativeItems_CreateDefinitionByIndexCall()
             "Missing gamedata signature \"CEconItemSchema::GetItemDefinitionByIndex\"."
         );
     }
-    PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
     PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
     PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
     PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
