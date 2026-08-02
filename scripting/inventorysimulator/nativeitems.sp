@@ -16,6 +16,12 @@
 #define ECON_VIEW_NETWORKED_ATTRIBUTES 156
 #define ECON_VIEW_CUSTOM_NAME 184
 
+enum ServerOS
+{
+    ServerOS_Linux,
+    ServerOS_Windows
+};
+
 GameData g_InventoryGameData;
 Handle g_CallGetItemSchema;
 Handle g_CallGetDefinitionByName;
@@ -1119,7 +1125,8 @@ Handle NativeItems_CreateRawVoidSignatureCall(const char[] signature)
 
 Handle NativeItems_CreateDefinitionByIndexCall()
 {
-    StartPrepSDKCall(SDKCall_Static);
+    bool useRawCall = NativeItems_GetServerOS() == ServerOS_Windows;
+    StartPrepSDKCall(useRawCall ? SDKCall_Raw : SDKCall_Static);
     if (!PrepSDKCall_SetFromConf(
         g_InventoryGameData,
         SDKConf_Signature,
@@ -1132,7 +1139,10 @@ Handle NativeItems_CreateDefinitionByIndexCall()
     }
     PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
     PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
-    PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+    if (!useRawCall)
+    {
+        PrepSDKCall_AddParameter(SDKType_PlainOldData, SDKPass_Plain);
+    }
     PrepSDKCall_SetReturnInfo(SDKType_PlainOldData, SDKPass_Plain);
     Handle call = EndPrepSDKCall();
     if (call == null)
@@ -1140,6 +1150,11 @@ Handle NativeItems_CreateDefinitionByIndexCall()
         SetFailState("Unable to prepare GetItemDefinitionByIndex.");
     }
     return call;
+}
+
+ServerOS NativeItems_GetServerOS()
+{
+    return view_as<ServerOS>(NativeItems_RequireOffset("ServerOS"));
 }
 
 Address NativeItems_GetDefinitionByIndex(int definitionIndex)
