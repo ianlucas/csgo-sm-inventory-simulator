@@ -64,6 +64,11 @@
                 "linux"     "0"
                 "windows"   "4"
             }
+            "ServerOS"
+            {
+                "linux"     "0"
+                "windows"   "1"
+            }
             "GameClientUserId"
             {
                 "linux"     "120"
