@@ -40,9 +40,6 @@ invsim_spray_on_use 0
 invsim_spray_cooldown 30
     Cooldown duration in seconds between sprays per player.
 
-invsim_public_api_spray_consume 1
-    Send keyless graffiti consume requests to the public API when invsim_apikey is not set.
-
 invsim_stattrak_ignore_bots 1
     Ignore StatTrak kill count increments for bot kills.
 
