@@ -14,6 +14,10 @@ ConVar g_CvarWsUrlPrintFormat;
 ConVar g_CvarWsLogin;
 ConVar g_CvarPersistInventory;
 ConVar g_CvarRequireInventory;
+ConVar g_CvarSprayEnabled;
+ConVar g_CvarSprayOnUse;
+ConVar g_CvarSprayCooldown;
+ConVar g_CvarPublicApiSprayConsume;
 ConVar g_CvarPublicApiStatTrak;
 ConVar g_CvarStatTrakIgnoreBots;
 ConVar g_CvarFallbackTeam;
@@ -106,6 +110,44 @@ void ConVars_Initialize()
         true,
         1.0
     );
+    g_CvarSprayEnabled = CreateConVar(
+        "invsim_spray_enabled",
+        "0",
+        "Enable spraying via the !spray command and/or use key.",
+        FCVAR_NONE,
+        true,
+        0.0,
+        true,
+        1.0
+    );
+    g_CvarSprayOnUse = CreateConVar(
+        "invsim_spray_on_use",
+        "0",
+        "Apply spray when the player presses the use key.",
+        FCVAR_NONE,
+        true,
+        0.0,
+        true,
+        1.0
+    );
+    g_CvarSprayCooldown = CreateConVar(
+        "invsim_spray_cooldown",
+        "30",
+        "Cooldown duration in seconds between sprays per player.",
+        FCVAR_NONE,
+        true,
+        0.0
+    );
+    g_CvarPublicApiSprayConsume = CreateConVar(
+        "invsim_public_api_spray_consume",
+        "1",
+        "Send keyless graffiti consume requests to the public API when invsim_apikey is not set.",
+        FCVAR_NONE,
+        true,
+        0.0,
+        true,
+        1.0
+    );
     g_CvarPublicApiStatTrak = CreateConVar(
         "invsim_public_api_stattrak_increment",
         "1",
@@ -165,10 +207,31 @@ void ConVars_Initialize()
     );
     HookConVarChange(g_CvarUrl, ConVars_OnUrlChanged);
     HookConVarChange(g_CvarApiKey, ConVars_OnApiSuspensionConVarChanged);
+    HookConVarChange(g_CvarSprayEnabled, ConVars_OnSprayEnabledChanged);
+    HookConVarChange(
+        g_CvarPublicApiSprayConsume,
+        ConVars_OnApiSuspensionConVarChanged
+    );
     HookConVarChange(
         g_CvarPublicApiStatTrak,
         ConVars_OnApiSuspensionConVarChanged
     );
+}
+
+public void ConVars_OnSprayEnabledChanged(
+    ConVar convar,
+    const char[] oldValue,
+    const char[] newValue
+)
+{
+    if (convar.BoolValue)
+    {
+        Sprays_Initialize();
+    }
+    else
+    {
+        Sprays_RemoveAll();
+    }
 }
 
 public void ConVars_OnUrlChanged(

@@ -25,6 +25,9 @@ enum struct InventoryItem
     bool hasDef;
     int def;
 
+    bool hasCharges;
+    int charges;
+
     char hash[INVSIM_MAX_HASH];
 
     bool hasMusicId;
@@ -41,6 +44,9 @@ enum struct InventoryItem
     bool hasStatTrak;
     int stattrak;
 
+    bool hasTint;
+    int tint;
+
 
     bool hasUid;
     int uid;
@@ -54,6 +60,8 @@ enum struct InventoryItem
     {
         this.hasDef = false;
         this.def = 0;
+        this.hasCharges = false;
+        this.charges = 0;
         this.hash[0] = '\0';
         this.hasMusicId = false;
         this.musicId = 0;
@@ -64,6 +72,8 @@ enum struct InventoryItem
         this.seed = 0;
         this.hasStatTrak = false;
         this.stattrak = -1;
+        this.hasTint = false;
+        this.tint = 0;
         this.hasUid = false;
         this.uid = 0;
         this.hasWear = false;
@@ -104,6 +114,9 @@ enum struct PlayerState
     bool loadedFromFile;
     int fetchGeneration;
     int wsUpdatedAt;
+    int sprayUsedAt;
+    int sprayLastButtons;
+    Handle sprayUseTimer;
     Address inventoryAddress;
     Address pendingActivation;
     bool activationScheduled;
@@ -116,6 +129,10 @@ enum struct PlayerState
         this.loadedFromFile = false;
         this.fetchGeneration = 0;
         this.wsUpdatedAt = 0;
+        this.sprayUsedAt = 0;
+        this.sprayLastButtons = 0;
+        delete this.sprayUseTimer;
+        this.sprayUseTimer = null;
         this.inventoryAddress = Address_Null;
         this.pendingActivation = Address_Null;
         this.activationScheduled = false;

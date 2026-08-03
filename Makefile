@@ -46,6 +46,7 @@ package: plugin
 		$(PACKAGE_DIR)/addons/sourcemod/gamedata/inventorysimulator.games.txt
 	install -Dm644 translations/inventorysimulator.phrases.txt \
 		$(PACKAGE_DIR)/addons/sourcemod/translations/inventorysimulator.phrases.txt
+	cp -a materials $(PACKAGE_DIR)/
 
 archive: package
 	rm -f $(ARCHIVE)

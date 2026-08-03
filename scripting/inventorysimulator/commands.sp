@@ -15,6 +15,16 @@ void Commands_Initialize()
         Commands_OnWsLogin,
         "Authenticate with Inventory Simulator."
     );
+    RegConsoleCmd(
+        "sm_spray",
+        Commands_OnSpray,
+        "Applies the equipped graffiti spray to the aimed surface."
+    );
+}
+
+public Action Commands_OnSpray(int client, int arguments)
+{
+    return Sprays_OnCommand(client);
 }
 
 public Action Commands_OnWs(int client, int arguments)

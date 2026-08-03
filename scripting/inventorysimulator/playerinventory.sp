@@ -11,6 +11,7 @@
 #define INVENTORY_KEY_T_WEAPONS "__t_weapons"
 #define INVENTORY_KEY_COLLECTIBLE "__collectible"
 #define INVENTORY_KEY_MUSIC_KIT "__music_kit"
+#define INVENTORY_KEY_GRAFFITI "__graffiti"
 
 methodmap PlayerInventory < StringMap
 {
@@ -25,6 +26,7 @@ methodmap PlayerInventory < StringMap
         inventory.SetValue(INVENTORY_KEY_T_WEAPONS, new StringMap());
         inventory.SetValue(INVENTORY_KEY_COLLECTIBLE, -1);
         inventory.SetValue(INVENTORY_KEY_MUSIC_KIT, -1);
+        inventory.SetValue(INVENTORY_KEY_GRAFFITI, -1);
         return view_as<PlayerInventory>(inventory);
     }
 
@@ -96,6 +98,10 @@ methodmap PlayerInventory < StringMap
             {
                 this.SetValue(INVENTORY_KEY_MUSIC_KIT, index);
             }
+            case InventoryItem_Graffiti:
+            {
+                this.SetValue(INVENTORY_KEY_GRAFFITI, index);
+            }
         }
     }
 
@@ -150,12 +156,21 @@ methodmap PlayerInventory < StringMap
             {
                 this.GetValue(INVENTORY_KEY_MUSIC_KIT, index);
             }
+            case InventoryItem_Graffiti:
+            {
+                this.GetValue(INVENTORY_KEY_GRAFFITI, index);
+            }
             default:
             {
                 index = -1;
             }
         }
         return this.GetItemAt(index, item);
+    }
+
+    public void ClearGraffiti()
+    {
+        this.SetValue(INVENTORY_KEY_GRAFFITI, -1);
     }
 
     public bool GetKnife(

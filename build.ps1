@@ -192,6 +192,12 @@ foreach ($file in $packageFiles) {
     Copy-Item -LiteralPath $file.Source -Destination $destination
 }
 
+$materialsDestination = Join-Path $packageRoot "materials"
+Copy-Item `
+    -LiteralPath (Join-Path $PSScriptRoot "materials") `
+    -Destination $materialsDestination `
+    -Recurse
+
 if (Test-Path -LiteralPath $archive) {
     Remove-Item -LiteralPath $archive -Force
 }

@@ -26,6 +26,8 @@ PlayerState g_PlayerStates[MAXPLAYERS + 1];
 #include "inventorysimulator/nativeitems.sp"
 #include "inventorysimulator/gamehooks.sp"
 #include "inventorysimulator/refresh.sp"
+#include "inventorysimulator/spraymodels.sp"
+#include "inventorysimulator/sprays.sp"
 #include "inventorysimulator/api.sp"
 #include "inventorysimulator/commands.sp"
 #include "inventorysimulator/gameevents.sp"
@@ -53,6 +55,7 @@ public void OnPluginStart()
     GameHooks_Initialize();
     Commands_Initialize();
     GameEvents_Initialize();
+    Sprays_Initialize();
 
     for (int client = 1; client <= MaxClients; client++)
     {
@@ -66,12 +69,49 @@ public void OnPluginStart()
     }
 }
 
+public void OnMapStart()
+{
+    Sprays_OnMapStart();
+}
+
 public void OnPluginEnd()
 {
+    Sprays_Shutdown();
     GameHooks_Shutdown();
     Refresh_RestoreAllClients();
     NativeItems_Shutdown();
     InventoryStore_Shutdown();
+}
+
+public Action OnPlayerRunCmd(
+    int client,
+    int &buttons,
+    int &impulse,
+    float velocity[3],
+    float angles[3],
+    int &weapon,
+    int &subtype,
+    int &commandNumber,
+    int &tickCount,
+    int &randomSeed,
+    int mouse[2]
+)
+{
+    if (client < 1 || client > MaxClients || IsFakeClient(client))
+    {
+        return Plugin_Continue;
+    }
+
+    bool usePressed = (buttons & IN_USE) != 0
+        && (g_PlayerStates[client].sprayLastButtons & IN_USE) == 0;
+    g_PlayerStates[client].sprayLastButtons = buttons;
+    if (usePressed
+        && g_CvarSprayEnabled.BoolValue
+        && g_CvarSprayOnUse.BoolValue)
+    {
+        Sprays_OnUsePressed(client);
+    }
+    return Plugin_Continue;
 }
 
 public void OnClientConnected(int client)

@@ -1,0 +1,11 @@
+Sprite
+{
+    "$basetexture" "decals/sprays/atlanta2017/g2_graffiti"
+    "$spriteorientation" "oriented"
+    "$spriteorigin" "[ 0.5 0.5 ]"
+    "$spriterendermode" "transcolor"
+    "$translucent" "1"
+    "$vertexcolor" "1"
+    "$vertexalpha" "1"
+    "$nocull" "1"
+}

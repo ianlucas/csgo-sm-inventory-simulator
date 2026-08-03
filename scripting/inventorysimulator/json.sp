@@ -302,6 +302,21 @@ bool Json_ParseEquippedProperty(
             errorLength
         );
     }
+    if (StrEqual(property, "graffiti"))
+    {
+        // Graffiti definitions are sticker-kit definitions, not item
+        // definitions, so NativeItems_HasDefinitionByIndex cannot validate
+        // them.
+        return Json_ParseSingleItem(
+            json,
+            cursor,
+            inventory,
+            InventoryItem_Graffiti,
+            false,
+            error,
+            errorLength
+        );
+    }
     if (!Json_SkipValue(json, cursor))
     {
         Format(error, errorLength, "Invalid value for \"%s\"", property);
@@ -451,7 +466,11 @@ bool Json_ParseItem(
             return false;
         }
 
-        if (StrEqual(property, "def"))
+        if (StrEqual(property, "charges"))
+        {
+            item.hasCharges = Json_ReadNullableInt(json, cursor, item.charges);
+        }
+        else if (StrEqual(property, "def"))
         {
             item.hasDef = Json_ReadNullableInt(json, cursor, item.def);
         }
@@ -494,6 +513,10 @@ bool Json_ParseItem(
         else if (StrEqual(property, "stattrak"))
         {
             item.hasStatTrak = Json_ReadNullableInt(json, cursor, item.stattrak);
+        }
+        else if (StrEqual(property, "tint"))
+        {
+            item.hasTint = Json_ReadNullableInt(json, cursor, item.tint);
         }
         else if (StrEqual(property, "stickers"))
         {
