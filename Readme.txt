@@ -31,6 +31,18 @@ invsim_persist_inventory 0
 invsim_require_inventory 0
     Require the player's inventory to be fetched before allowing them to join the game.
 
+invsim_spray_enabled 0
+    Enable spraying via the !spray command and/or use key. Enabling downloads tiny VMT wrappers for every graffiti texture available in the server's CS:GO files.
+
+invsim_spray_on_use 0
+    Apply spray when the player presses the use key.
+
+invsim_spray_cooldown 30
+    Cooldown duration in seconds between sprays per player.
+
+invsim_public_api_spray_consume 1
+    Send keyless graffiti consume requests to the public API when invsim_apikey is not set.
+
 invsim_stattrak_ignore_bots 1
     Ignore StatTrak kill count increments for bot kills.
 
@@ -45,3 +57,6 @@ sm_ws
 
 sm_wslogin
     Authenticates the player with Inventory Simulator and displays their login URL.
+
+sm_spray
+    Applies the player's equipped graffiti spray to the aimed surface.

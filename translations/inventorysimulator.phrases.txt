@@ -65,4 +65,62 @@
         "pt"            "Não foi possível autenticar ao seu inventário. Tente novamente mais tarde."
         "chi"           "无法登录您的库存，请稍后再试。"
     }
+
+    "SprayAlive"
+    {
+        "en"            "You must be alive to spray."
+        "pt"            "Você precisa estar vivo para grafitar."
+        "chi"           "您必须存活才能使用涂鸦。"
+    }
+
+    "SprayMissing"
+    {
+        "en"            "Equip graffiti and refresh your inventory first."
+        "pt"            "Equipe um grafite e atualize seu inventário primeiro."
+        "chi"           "请先装备涂鸦并刷新您的库存。"
+    }
+
+    "SprayUnsupported"
+    {
+        "en"            "The equipped graffiti is not installed on this server."
+        "pt"            "O grafite equipado não está instalado neste servidor."
+        "chi"           "此服务器未安装当前装备的涂鸦。"
+    }
+
+    "SprayCooldown"
+    {
+        "#format"       "{1:d}"
+        "en"            "You cannot spray right now. Please wait {1} seconds."
+        "pt"            "Você não pode grafitar agora. Aguarde {1} segundos."
+        "chi"           "您现在暂时无法使用涂鸦，请等待 {1} 秒后再试。"
+    }
+
+    "SprayUnavailable"
+    {
+        "en"            "The spray material could not be precached."
+        "pt"            "Não foi possível pré-carregar o material do grafite."
+        "chi"           "无法预缓存涂鸦材质。"
+    }
+
+    "SprayNoSurface"
+    {
+        "en"            "Aim at a wall or floor within spraying distance."
+        "pt"            "Mire em uma parede ou chão dentro do alcance do grafite."
+        "chi"           "请瞄准涂鸦距离内的墙壁或地面。"
+    }
+
+    "SprayCharges"
+    {
+        "#format"       "{1:d}"
+        "en"            "Charges remaining: {1}"
+        "pt"            "Cargas restantes: {1}"
+        "chi"           "剩余使用次数：{1}"
+    }
+
+    "SprayChargesEmpty"
+    {
+        "en"            "Your graffiti has run out of charges and was removed."
+        "pt"            "Seu grafite ficou sem cargas e foi removido."
+        "chi"           "您的涂鸦已用完并被移除。"
+    }
 }

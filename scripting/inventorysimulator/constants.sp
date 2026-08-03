@@ -28,6 +28,14 @@
 #define INVSIM_GENERATED_ITEM_ID_LOW 730521531
 #define INVSIM_GENERATED_ITEM_ID_HIGH 15
 
+#define INVSIM_SPRAY_DISTANCE 128.0
+#define INVSIM_SPRAY_APPLY_DURATION 1.5
+#define INVSIM_SPRAY_SOLID_DURATION 240.0
+#define INVSIM_SPRAY_FADE_START 320.0
+#define INVSIM_SPRAY_TOTAL_DURATION 360.0
+#define INVSIM_SPRAY_RATE_LIMIT_CAPACITY 1.0
+#define INVSIM_SPRAY_RATE_LIMIT_REFILL_INTERVAL 30.0
+
 enum LoadoutSlot
 {
     Loadout_Invalid = -1,
@@ -61,6 +69,7 @@ enum InventoryItemKind
     InventoryItem_Glove,
     InventoryItem_Knife,
     InventoryItem_MusicKit,
+    InventoryItem_Graffiti,
     InventoryItem_Weapon
 };
 
